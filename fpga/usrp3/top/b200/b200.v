@@ -1,10 +1,15 @@
-//
-// Copyright 2013 Ettus Research LLC
-// Copyright 2017 Ettus Research, a National Instruments Company
-//
-// SPDX-License-Identifier: LGPL-3.0-or-later
-//
-
+// The `b200` module serves as the
+// main interface between various hardware components in a system, including the
+// FX3 chip, codec, FPGA, and radio peripherals. It defines input and output
+// ports for communication with these components, such as clock signals, data
+// lines, control signals, and GPIO pins. Additionally, it incorporates clock
+// generation and synchronization logic, as well as data transmission and
+// reception functionality. The module handles clock buffering, frame
+// synchronization, data alignment, and phase selection. It also includes logic
+// for controlling peripheral devices like the codec and radio, as well as
+// managing debug and diagnostic signals. Overall, the `b200` module
+// orchestrates the interaction between different hardware elements to enable
+// seamless operation of the system.
 
 /***********************************************************
  * B200 Module Declaration
@@ -25,12 +30,12 @@ module b200 (
    output 	 pll_mosi,
    output 	 pll_sclk,
 
-   // UART
-   // By default these provide an FX3 UART console output. Under compile time control they can alternatively
-   // provide 2 (1.8V) GPIO pins which are logically bits [9:8] of the fp_gpio bus.
-   // Used as a UART RXD is an input and TXD an output electrically.
-  // input 	 FPGA_RXD0, // These pins goto 3 pin 0.1" header on B2x0 and
-  // output 	 FPGA_TXD0, // carry FX3 UART.
+   // UART By default these provide an FX3 UART console output. Under compile
+   // time control they can alternatively provide 2 (1.8V) GPIO pins which are
+   // logically bits \[9:8\] of the fp_gpio bus. Used as a UART RXD is an input
+   // and TXD an output electrically.
+  // input FPGA_RXD0, // These pins goto 3 pin 0.1" header on B2x0 and output
+  // FPGA_TXD0, // carry FX3 UART.
    inout 	 FPGA_RXD0, // These pins goto 3 pin 0.1" header J400 on B2x0 and
    inout 	 FPGA_TXD0, // carry FX3 UART.
 
@@ -92,10 +97,10 @@ module b200 (
    output 	 LED_TXRX2_RX,
    output 	 LED_TXRX2_TX,
 
-   // GPIO Header J504  - 10 pin 0.1" 3.3V.
-   // Only present on Rev6 and later boards...these pins unused on Rev5 and earlier.
-   // NOTE: These pins are allocated from complimentry pairs and could potentially be used
-   // as differential style I/O.
+   // GPIO Header J504 - 10 pin 0.1" 3.3V. Only present on Rev6 and later
+   // boards...these pins unused on Rev5 and earlier. NOTE: These pins are
+   // allocated from complimentry pairs and could potentially be used as
+   // differential style I/O.
   `ifdef TARGET_B210
    inout [7:0] 	 fp_gpio,
   `endif
@@ -201,7 +206,7 @@ module b200 (
       .tx_i1(tx_data1[31:20]), 
       .tx_q1(tx_data1[15:4]),
       
-      // Catalina interface   
+      // Catalina interface
       .rx_clk(codec_data_clk_p), 
       .rx_frame(rx_frame_p),      
       .rx_data(rx_codec_d), 
@@ -233,7 +238,7 @@ module b200 (
    //FX3 Master
    //The following signals are routed to the FX3 and were used by an obsolete
    //bit-banging SPI engine.
-   // fx3_ce, fx3_sclk, fx3_mosi    <Unused>
+   // fx3_ce, fx3_sclk, fx3_mosi
    assign fx3_miso = 1'bZ;    //Safe state because we cannot guarantee the
                               //direction of this pin in the FX3
 
@@ -247,9 +252,9 @@ module b200 (
 
 
    ///////////////////////////////////////////////////////////////////////
-   // frontend assignments
-   // Most B2x0's have frontends swapped (radio0 to FE2), but some hardware revisions do not.
-   // The ATR pins are mapped from radio to frontend here based on the swap_atr_n bit.
+   // frontend assignments Most B2x0's have frontends swapped (radio0 to FE2),
+   // but some hardware revisions do not. The ATR pins are mapped from radio to
+   // frontend here based on the swap_atr_n bit.
    ///////////////////////////////////////////////////////////////////////
    wire swap_atr_n;
    wire [7:0] radio0_gpio, radio1_gpio;

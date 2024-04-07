@@ -1,17 +1,42 @@
-//
-// Copyright 2013 Ettus Research LLC
-// Copyright 2017 Ettus Research, a National Instruments Company
-//
-// SPDX-License-Identifier: LGPL-3.0-or-later
-//
-//
+// The `b200_io` module facilitates the communication between different
+// components in a system, particularly focusing on data transmission and
+// reception. It includes input and output ports for interfacing with various
+// signals and data streams. Here's a breakdown of the module's functionality:
+
+// - **Inputs and Outputs**: The module declares input ports for signals such as
+//   `reset` and `mimo`, as well as output ports for clock signals (`radio_clk`
+//   and `tx_clk`) and data streams (`rx_i0`, `rx_q0`, `rx_i1`, `rx_q1`,
+//   `tx_data`, etc.).
+
+// - **Clock Generation and Synchronization**: It generates and synchronizes
+//   clock signals (`radio_clk`, `rx_clk`, `tx_clk`) using clock buffers
+//   (`BUFIO2`, `BUFGMUX`) and clock multiplexers (`BUFGMUX`).
+
+// - **Data Transmission and Reception**: The module uses DDR (Double Data Rate)
+//   flip-flops (`IDDR2`, `ODDR2`) to sample incoming data streams (`rx_data`)
+//   and prepare outgoing data streams (`tx_data`). It also handles frame
+//   synchronization (`rx_frame`) and data strobing (`tx_strobe`) for proper
+//   data transmission and reception.
+
+// - **Clock Phase Detection**: It includes logic (`find_radio_clk_phase`) to
+//   detect the phase of the radio clock signal, which is crucial for
+//   synchronizing data transmission.
+
+// - **Data Buffering and Delay**: The module utilizes registers (`rx_i_del`,
+//   `rx_q_del`, `tx_i_del`, `tx_q_del`) to buffer and delay incoming and
+//   outgoing data streams, ensuring smooth data flow.
+
+// Overall, the `b200_io` module serves as a crucial intermediary between
+// different components in the system, ensuring accurate and reliable data
+// communication.
+
+
+
 //------------------------------------------------------------------
-//
 // In SISO mode, we output a clock thats 1x the frequency of the Catalina
-// source-synchronous bus clock to be used as the radio_clk.
-// In MIMO mode, we output a clock thats 1/2 the frequency of the Catalina
-// source-synchronous bus clock to be used as the radio_clk.
-//
+// source-synchronous bus clock to be used as the radio_clk. In MIMO mode, we
+// output a clock thats 1/2 the frequency of the Catalina source-synchronous bus
+// clock to be used as the radio_clk.
 //------------------------------------------------------------------
 
 module b200_io
@@ -43,9 +68,7 @@ module b200_io
    genvar 	   z;
 
    //------------------------------------------------------------------
-   //
    // Synchronize MIMO signal from bus_clk to siso_clk.
-   //
    //------------------------------------------------------------------
    reg 		   mimo_sync, mimo_sync2;
 
@@ -56,9 +79,9 @@ module b200_io
 
 
    //------------------------------------------------------------------
-   // Clock Buffering.
-   // BUFIO2 drives all IDDR2 and ODDR2 cells directly in bank3.
-   // Need two pairs of BUFIO2 one pair each for Top Left and Bottom Left half banks.
+   // Clock Buffering. BUFIO2 drives all IDDR2 and ODDR2 cells directly in
+   // bank3. Need two pairs of BUFIO2 one pair each for Top Left and Bottom Left
+   // half banks.
    //------------------------------------------------------------------
    wire 			rx_clk_buf;
    wire 			mimo_clk_unbuf;
@@ -68,10 +91,7 @@ module b200_io
    IBUFG clk_ibufg (.O(rx_clk_buf), .I(rx_clk));
 
    //------------------------------------------------------------------
-   //
-   // Buffers for LEFT TOP half bank pins
-   // BUFIO2_X0Y22
-   //
+   // Buffers for LEFT TOP half bank pins BUFIO2_X0Y22
    //------------------------------------------------------------------
    BUFIO2 #(
 	    .DIVIDE(4),
@@ -101,10 +121,7 @@ module b200_io
 	);
 
    //------------------------------------------------------------------
-   //
-   // Buffers for LEFT BOTTOM half bank pins
-   // BUFIO2_X1Y14
-   //
+   // Buffers for LEFT BOTTOM half bank pins BUFIO2_X1Y14
    //------------------------------------------------------------------
    BUFIO2 #(
 	    .DIVIDE(1),
@@ -142,8 +159,9 @@ module b200_io
 		       );
 
    //------------------------------------------------------------------
-   // 2-1 mux combined with BUFG to drive global radio_clk.
-   // Note: Not addressed setup/hold constraints of S input ...unsure if anything "bad" can happen here.
+   // 2-1 mux combined with BUFG to drive global radio_clk. Note: Not addressed
+   // setup/hold constraints of S input ...unsure if anything "bad" can happen
+   // here.
    //------------------------------------------------------------------
    BUFGMUX #(
 	     .CLK_SEL_TYPE("SYNC"))
@@ -340,17 +358,17 @@ module b200_io
 		    .S(1'b0));
 
    //------------------------------------------------------------------
-   //
    // De-mux I & Q, Ch A & B onto fullrate clock.
    //
-   // In all modes we grab data from the IDDR2 using negedge of siso_clk.
-   // IDDR2 updates all Q pins on posedge of io_clk. siso_clk does not have aligned phase
-   // with siso_clk...siso_clk is always a little more delayed than io_clk.
-   // This small delay is always much smaller than half a clk cycle. Thus by sampling the Q outputs
-   // with negedge siso_clk we avoid any risk of a race condition (hold violation on receiveing register).
+   // In all modes we grab data from the IDDR2 using negedge of siso_clk. IDDR2
+   // updates all Q pins on posedge of io_clk. siso_clk does not have aligned
+   // phase with siso_clk...siso_clk is always a little more delayed than
+   // io_clk. This small delay is always much smaller than half a clk cycle.
+   // Thus by sampling the Q outputs with negedge siso_clk we avoid any risk of
+   // a race condition (hold violation on receiveing register).
    //
-   // In SISO mode data is replicated onto both CH0 and CH1 for max flexibility in using the DDC's.
-   //
+   // In SISO mode data is replicated onto both CH0 and CH1 for max flexibility
+   // in using the DDC's.
    //------------------------------------------------------------------
    reg [11:0] rx_i_del, rx_q_del;
    reg [11:0] rx_i0_siso_pos;
@@ -369,14 +387,15 @@ module b200_io
 
    always @(negedge siso_clk)
      if(mimo_sync)
-       // rx_frame_0 was sampled by same falling io_clk edge as rx_i[x]
+       // rx_frame_0 was sampled by same falling io_clk edge as rx_i\[x\]
        // rx_frame_0 == 0 causes I & Q to be allocated to CH0
        if(rx_frame_0) begin
 	  rx_i_del[11:0] <= rx_i[11:0];
 	  rx_q_del[11:0] <= rx_q[11:0];
        end
        else begin
-	  // Deal with the fact that Ch A and Ch B are labelled in silkscreen opposite to their documentation in AD9361.
+	  // Deal with the fact that Ch A and Ch B are labelled in silkscreen opposite
+	  // to their documentation in AD9361.
 	  rx_i0_siso[11:0] <= rx_i[11:0];
 	  rx_q0_siso[11:0] <= rx_q[11:0];
 	  rx_i1_siso[11:0] <= rx_i_del[11:0];
@@ -390,13 +409,14 @@ module b200_io
      end // else: !if(rx_frame_0)
 
    //------------------------------------------------------------------
-   //
-   // Now prepare data for crossing into radio_clk domain which can be for SISO mode (inverted) siso_clk or for MIMO mode siso_clk/2.
-   // In MIMO mode tx_strobe is used to maintain a known phase relationship betwwen siso_clk and radio_clk.
-   // (Note: Negedge or posedge is used conditionally so that we have massive margin against a fast-path race condition
-   // betwwen siso_clk and radio_clk). This kind of arrangement could still lead to confusion in timing analysis
-   // even if it works in the real world depending on how well the STA tool can do automatic case analysis.
-   //
+   // Now prepare data for crossing into radio_clk domain which can be for SISO
+   // mode (inverted) siso_clk or for MIMO mode siso_clk/2. In MIMO mode
+   // tx_strobe is used to maintain a known phase relationship betwwen siso_clk
+   // and radio_clk. (Note: Negedge or posedge is used conditionally so that we
+   // have massive margin against a fast-path race condition betwwen siso_clk
+   // and radio_clk). This kind of arrangement could still lead to confusion in
+   // timing analysis even if it works in the real world depending on how well
+   // the STA tool can do automatic case analysis.
    //------------------------------------------------------------------
    // This code lock only relevent in MIMO mode.
    always @(negedge siso_clk)
@@ -458,9 +478,7 @@ module b200_io
 		.CE(1'b1), .D0(1'b1), .D1(1'b0), .R(1'b0), .S(1'b0));
 
    //------------------------------------------------------------------
-   //
    // Mux I & Q, Ch A & B onto fullrate clockTX bus to AD9361
-   //
    //------------------------------------------------------------------
    wire tx_strobe;
    reg [11:0] tx_i_del, tx_q_del;
@@ -480,14 +498,15 @@ module b200_io
    always @(posedge siso_clk)
      tx_strobe_del <= tx_strobe;
 
-   // This strange piece of logic allows either USRP DUC to drive the AD9361 in SISO mode.
-   // This is principly used in the CODEC loopback test.
+   // This strange piece of logic allows either USRP DUC to drive the AD9361 in
+   // SISO mode. This is principly used in the CODEC loopback test.
    wire [11:0] tx_im = (mimo_sync ||  tx_i0 != 12'h0) ? tx_i0 : tx_i1;
    wire [11:0] tx_qm = (mimo_sync ||  tx_q0 != 12'h0) ? tx_q0 : tx_q1;
 
 
-   // Deal with the fact that Ch A and Ch B are labelled in silkscreen opposite to their documentation in AD9361.
-   // (Except on B200 based on AD9364 where only the true Ch A is stuffed)
+   // Deal with the fact that Ch A and Ch B are labelled in silkscreen opposite
+   // to their documentation in AD9361. (Except on B200 based on AD9364 where
+   // only the true Ch A is stuffed)
    always @(posedge siso_clk)
      if(tx_strobe)
        begin
@@ -496,59 +515,26 @@ module b200_io
        end
      else
        {tx_i,tx_q} <= {tx_i_del,tx_q_del};
-   //
    // Debug
-   //
-/* -----\/----- EXCLUDED -----\/-----
-   wire [35:0] CONTROL0;
-   reg [11:0]  tx_i_del_debug, tx_q_del_debug;
-   reg [11:0]  tx_i_debug,tx_q_debug;
-   reg [11:0]  tx_i0_debug,tx_q0_debug;
-   reg 	       find_radio_clk_phase_debug;
-   reg 	       find_radio_clk_phase_del_debug;
-   reg 	       tx_strobe_debug;
-   reg 	       tx_strobe_del_debug;
+/* \-----/----- EXCLUDED -----/----- wire \[35:0\] CONTROL0; reg \[11:0\]
+   tx_i_del_debug, tx_q_del_debug; reg \[11:0\] tx_i_debug,tx_q_debug; reg
+   \[11:0\] tx_i0_debug,tx_q0_debug; reg find_radio_clk_phase_debug; reg
+   find_radio_clk_phase_del_debug; reg tx_strobe_debug; reg tx_strobe_del_debug;
 
+   always @(posedge siso_clk) begin tx_i_del_debug <= tx_i_del; tx_q_del_debug
+   <= tx_q_del; tx_i_debug <= tx_i; tx_q_debug <= tx_q; tx_i0_debug <=tx_i0;
+   tx_q0_debug <= tx_q0; find_radio_clk_phase_debug <= find_radio_clk_phase;
+   find_radio_clk_phase_del_debug <= find_radio_clk_phase_del; tx_strobe_debug
+   <= tx_strobe; tx_strobe_del_debug <= tx_strobe_del; end
 
-   always @(posedge siso_clk) begin
-      tx_i_del_debug <= tx_i_del;
-      tx_q_del_debug <= tx_q_del;
-      tx_i_debug <= tx_i;
-      tx_q_debug <= tx_q;
-      tx_i0_debug <=tx_i0;
-      tx_q0_debug <= tx_q0;
-      find_radio_clk_phase_debug <= find_radio_clk_phase;
-      find_radio_clk_phase_del_debug <= find_radio_clk_phase_del;
-      tx_strobe_debug <= tx_strobe;
-      tx_strobe_del_debug <= tx_strobe_del;
-   end
+   chipscope_icon chipscope_icon_i0 ( .CONTROL0(CONTROL0) // INOUT BUS \[35:0\]
+   );
 
+   chipscope_ila_128 chipscope_ila_i0 ( .CONTROL(CONTROL0), // INOUT BUS
+   \[35:0\] .CLK(siso_clk), // IN .TRIG0( { tx_i_del_debug\[11:0\],
+   tx_q_del_debug\[11:0\], tx_i_debug\[11:0\], tx_q_debug\[11:0\],
+   tx_i0_debug\[11:0\], tx_q0_debug\[11:0\], find_radio_clk_phase_debug,
+   find_radio_clk_phase_del_debug, tx_strobe_debug, tx_strobe_del_debug } )
 
-
-   chipscope_icon chipscope_icon_i0
-     (
-      .CONTROL0(CONTROL0) // INOUT BUS [35:0]
-      );
-
-   chipscope_ila_128 chipscope_ila_i0
-     (
-      .CONTROL(CONTROL0), // INOUT BUS [35:0]
-      .CLK(siso_clk), // IN
-      .TRIG0(
-	     {
-	      tx_i_del_debug[11:0],
-	      tx_q_del_debug[11:0],
-	      tx_i_debug[11:0],
-	      tx_q_debug[11:0],
-	      tx_i0_debug[11:0],
-	      tx_q0_debug[11:0],
-	      find_radio_clk_phase_debug,
-	      find_radio_clk_phase_del_debug,
-	      tx_strobe_debug,
-	      tx_strobe_del_debug
-	      }
-	     )
-
-      );
-    -----/\----- EXCLUDED -----/\----- */
+   ); -----/----- EXCLUDED -----/----- */
 endmodule
