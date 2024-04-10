@@ -1,22 +1,21 @@
-// This should all be a comment...
-1. Parameter Definition: The module defines several parameters for control and data signal identifiers, buffer sizes, and FIFO sizes.
+// 1. Parameter Definition: The module defines several parameters for control and data signal identifiers, buffer sizes, and FIFO sizes.
 
-2. Interface Definitions:
-   - Bus Interfaces: For communication with other components.
-   - Radio Interfaces: Interfaces for radio communication, including RX and TX signals.
-   - GPSDO UART: Interface for GPS-disciplined oscillator UART communication.
-   - Core Interfaces: Various control and data interfaces.
-   - Debug UART: UART interface for debugging purposes.
+// 2. Interface Definitions:
+//    - Bus Interfaces: For communication with other components.
+//    - Radio Interfaces: Interfaces for radio communication, including RX and TX signals.
+//    - GPSDO UART: Interface for GPS-disciplined oscillator UART communication.
+//    - Core Interfaces: Various control and data interfaces.
+//    - Debug UART: UART interface for debugging purposes.
 
-3. Internal Logic:
-   - PPS Timing Generation: Generates internal PPS signals and synchronizes them with the radio clock.
-   - Response Mux Routing: Routes responses from different sources using a multiplexer.
-   - Control Demux Routing: Routes control signals to different destinations using a demultiplexer.
-   - UART Communication: Handles UART communication for control and response data.
-   - Miscellaneous Controls: Handles miscellaneous controls and settings.
-   - RX and TX Data Mux Routing: Routes RX and TX data using multiplexers.
-   - Radio Logic: Implements logic for radio communication, including FIFOs and interfaces.
-   - Debug UART Logic: Implements logic for debugging UART communication.
+// 3. Internal Logic:
+//    - PPS Timing Generation: Generates internal PPS signals and synchronizes them with the radio clock.
+//    - Response Mux Routing: Routes responses from different sources using a multiplexer.
+//    - Control Demux Routing: Routes control signals to different destinations using a demultiplexer.
+//    - UART Communication: Handles UART communication for control and response data.
+//    - Miscellaneous Controls: Handles miscellaneous controls and settings.
+//    - RX and TX Data Mux Routing: Routes RX and TX data using multiplexers.
+//    - Radio Logic: Implements logic for radio communication, including FIFOs and interfaces.
+//    - Debug UART Logic: Implements logic for debugging UART communication.
 
 
 
