@@ -1,4 +1,4 @@
-
+// This should all be a comment...
 1. Parameter Definition: The module defines several parameters for control and data signal identifiers, buffer sizes, and FIFO sizes.
 
 2. Interface Definitions:
