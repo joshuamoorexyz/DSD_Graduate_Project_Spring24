@@ -5,8 +5,7 @@
 1\. First install virtualbox on your windows 11 pc.
 
 Install ISE for windows 11
-\[[Link](<../../src/%5BDownloads%5D(https:/www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/archive-ise.html)>)\]
-**BAJ: broken link**
+\[[Link](https:/www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/archive-ise.html)
 
 The B210 USRP uses ISE to modify the images that will be built and used on the
 USRP itself.
@@ -16,21 +15,18 @@ virtualization enabled in my bios the program would not continue so i simply
 disabled the check for the virtualization by going to
 /bin/validate_virtualization and commented the line like so
 
-**BAJ: bad link to images, this and all following.**
-
-![](C:%5CUsers%5CfiveG%5COneDrive%5CPictures%5CScreenshots%5CScreenshot%202024-03-06%20115358.png)<img style="display: block; margin-left: auto; margin-right: auto;" src="../../images/vmfix.png" alt="" width="726" height="587">![](../../src/images/vmfix.png)![](../../src/images/vmfix)
+![](../../images/vmfix.png)
 
 2.2 After this simply install the ISE program onto the computer.
 
-![](C:%5CUsers%5CfiveG%5CAppData%5CRoaming%5Cmarktext%5Cimages%5C2024-03-18-11-20-12-image.png)<img style="display: block; margin-left: auto; margin-right: auto;" src="../../images/vmoverview.png" alt="" width="684" height="429">
+![](../../images/vmoverview.png)
 
-<img style="display: block; margin-left: auto; margin-right: auto;" src="../../images/vminstalled.png" alt="" width="695" height="512">
+![](../../images/vminstalled.png)
 
 3.  Setup environment settings for ISE
 
-<img style="display: block; margin-left: auto; margin-right: auto;" src="../../images/envsettings.png" alt="" width="833" height="620">
+![](../../images/envsettings.png)
 
-![](C:%5CUsers%5CfiveG%5CAppData%5CRoaming%5Cmarktext%5Cimages%5C2024-03-18-12-09-22-image.png)
 
 ## <u>Development Environment Setup</u>
 
