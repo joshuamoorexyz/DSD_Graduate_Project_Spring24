@@ -1,15 +1,14 @@
-// The `b200` module serves as the
-// main interface between various hardware components in a system, including the
-// FX3 chip, codec, FPGA, and radio peripherals. It defines input and output
-// ports for communication with these components, such as clock signals, data
-// lines, control signals, and GPIO pins. Additionally, it incorporates clock
-// generation and synchronization logic, as well as data transmission and
-// reception functionality. The module handles clock buffering, frame
-// synchronization, data alignment, and phase selection. It also includes logic
-// for controlling peripheral devices like the codec and radio, as well as
-// managing debug and diagnostic signals. Overall, the `b200` module
-// orchestrates the interaction between different hardware elements to enable
-// seamless operation of the system.
+// The `b200` module serves as the main interface between various hardware
+// components in a system, including the FX3 chip, codec, FPGA, and radio
+// peripherals. It defines input and output ports for communication with these
+// components, such as clock signals, data lines, control signals, and GPIO
+// pins. Additionally, it incorporates clock generation and synchronization
+// logic, as well as data transmission and reception functionality. The module
+// handles clock buffering, frame synchronization, data alignment, and phase
+// selection. It also includes logic for controlling peripheral devices like the
+// codec and radio, as well as managing debug and diagnostic signals. Overall,
+// the `b200` module orchestrates the interaction between different hardware
+// elements to enable seamless operation of the system.
 
 /***********************************************************
  * B200 Module Declaration

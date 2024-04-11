@@ -5,28 +5,27 @@
 1\. First install virtualbox on your windows 11 pc.
 
 Install ISE for windows 11
-\[[Link](https:/www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/archive-ise.html)
+[Link](https:/www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/archive-ise.html)
 
 The B210 USRP uses ISE to modify the images that will be built and used on the
 USRP itself.
 
 2.1 Windows 11 bios fix: After this i had a problem where although i had
 virtualization enabled in my bios the program would not continue so i simply
-disabled the check for the virtualization by going to
-/bin/validate_virtualization and commented the line like so
+disabled the check for the virtualization by going to /bin/validate
+virtualization and commented the line like so
 
-![](../../images/vmfix.png)
+<img src="../images/vmfix.png" alt="" width="890" height="720">
 
 2.2 After this simply install the ISE program onto the computer.
 
-![](../../images/vmoverview.png)
+<img src="../images/vmoverview.png" alt="" width="835" height="524">
 
-![](../../images/vminstalled.png)
+<img src="../images/vminstalled.png" alt="" width="867" height="639">
 
 3.  Setup environment settings for ISE
 
-![](../../images/envsettings.png)
-
+<img src="../images/envsettings.png" alt="" width="858" height="638">
 
 ## <u>Development Environment Setup</u>
 

@@ -1,6 +1,5 @@
 # Using a custom Image
 
-**BAJ: some formatting**
 
 1.  Compile Custom FPGA Image
 
